@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="da">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resturant barbuska</title>
+    <link rel="stylesheet" href="">
+
+    <style>
+        body,
+        html {
+            height: 100%;
+            margin: 0;
+            font-family: "Helvetica"sans-serif;
+            background-color: #d9c4a8;
+
+        }
+
+        /* Menu og header */
+
+        .header {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("imgs/medium/roedvin-md.jpg");
+            height: 100%;
+            background-position: top;
+            background-repeat: no-repeat;
+            background-size: cover;
+            position: relative;
+        }
+
+        .header_text {
+            text-align: center;
+            position: absolute;
+            top: 60%;
+            left: 55%;
+            color: white;
+        }
+
+        .header_text button {
+            border: none;
+            border-radius: 4px;
+            outline: 0;
+            display: inline-block;
+            margin: 5px;
+            padding: 10px 25px;
+            color: black;
+            background-color: #d9c4a8;
+            text-align: center;
+            cursor: pointer;
+
+
+        }
+
+        .header_text button:hover {
+            background-color: #a38f76;
+            color: black;
+        }
+
+        img {
+            max-width: 300px;
+
+        }
+
+        h1 {
+            font-size: 2.8em;
+        }
+
+        h2 {
+            font-size: 2em;
+            text-align: center;
+        }
+
+        h3 {
+            font-size: 1.4em;
+
+        }
+
+        h4 {
+            font-size: 1.3em;
+            text-align: center;
+        }
+
+        p {
+            font-weight: normal;
+            font-size: 1em;
+            text-align: left;
+        }
+
+        .container {
+
+            display: grid;
+            grid-gap: 10px;
+            grid-template-columns: 400px 400px 400px;
+            grid-template-rows: 400px;
+        }
+
+
+
+        article {
+            background-color: #c9b69c;
+            padding: 15px;
+            clear: both;
+
+        }
+
+        footer {
+            background-color: #c9b69c;
+            padding-top: 30px;
+            padding-bottom: 30px;
+            margin-top: 70px;
+
+            text-align: center;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="header">
+        <div class="header_text">
+            <h1>BISTRO BABUSHKAS</h1>
+            <button>Alle</button>
+            <button>Forretter</button>
+            <button>Hovedretter</button>
+            <button>Dessert</button>
+            <button>Drikkevare</button>
+        </div>
+    </div>
+
+    <h2>Velkommen til </h2>
+    <h4>Menukort</h4>
+
+    <div class="container">
+        <template id="menu-template">
+        <article>
+        <img src="" alt="">
+        <p id="id"></p>
+        <p id="kategori"></p>
+        <h3 id="navn"></h3>
+        <p>Pris: <span id="pris"></span></p>
+        <p id="kortbeskrivelse"></p>
+        <p id="langbeskrivelse"></p>
+        <p id="oprindelsesregion"></p>
+        </article>
+    </template>
+
+
+    </div>
+
+    <footer>
+        <section><address>Addresse: <br>Grønnegade 97<br>1234 København K </address>
+            <aside>Åbningstider: <br> Mandag – fredag 10:30 – 22:00<br>Lørdag 12:00 – 23:00</aside>
+        </section>
+    </footer>
+
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", hentJson);
+
+        let retter;
+
+        async function hentJson() {
+
+            let myJson = await fetch("json/menu.json");
+            retter = await myJson.json();
+
+
+            visMad();
+        }
+
+
+
+        function visMad() {
+
+            let modtager = document.querySelector(".container");
+            let temp = document.querySelector("#menu-template");
+
+
+
+            retter.forEach(madretter => {
+
+
+                let klon = temp.cloneNode(true).content;
+
+                klon.querySelector("#id").textContent = madretter.id;
+                klon.querySelector("#kategori").textContent = madretter.kategori;
+                klon.querySelector("h3").textContent = madretter.navn;
+                klon.querySelector("#pris").textContent = madretter.pris;
+                klon.querySelector("#kortbeskrivelse").textContent = madretter.kortbeskrivelse;
+                klon.querySelector("#langbeskrivelse").textContent = madretter.langbeskrivelse;
+                klon.querySelector("#oprindelsesregion").textContent = madretter.oprindelsesregion;
+                klon.querySelector("img").src = madretter.billede;
+
+                modtager.appendChild(klon);
+            });
+        }
+    </script>
+</body>
+
+</html>
