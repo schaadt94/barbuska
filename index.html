@@ -312,7 +312,7 @@
 
 
         <template class="menu-template">
-        <article>
+        <article class="retter">
         <img src="" alt="">
         <p class="id"></p>
         <p class="kategori"></p>
@@ -334,52 +334,53 @@
 
 
     <script>
-        let dest = document.querySelector(".container"),
-            retter,
-            filter = "alle";
+        let retter;
+        let dest = document.querySelector(".container");
         document.addEventListener("DOMContentLoaded", hentJson);
+        madFilter = "alle";
 
-        async function hentJson() {
-
-            let myJson = await fetch("json/menu.json");
-            retter = await myJson.json();
-            visMad();
-        }
         document.querySelectorAll(".menu-item").forEach(knap => {
-            console.log(knap);
+            console.log(knap)
             knap.addEventListener("click", filtrering)
+
         });
 
         function filtrering() {
             dest.textContent = "";
-            filter = this.getAttribute("data-retter");
-            console.log("filter");
-            visMad();
+            madFilter = this.getAttribute("data-retter");
+            console.log(madFilter);
+            visRetter();
+        }
+
+        async function hentJson() {
+            let myJson = await fetch("json/menu.json");
+            retter = await myJson.json();
+            visRetter();
         }
 
 
-        function visMad() {
+        function visRetter() {
             let temp = document.querySelector(".menu-template");
-            document.querySelector("h4").textContent = filter;
-            console.log(visMad);
+            document.querySelector("h4").textContent = madFilter;
+            console.log(visRetter);
 
-            retter.forEach(madretter => {
-                if (madretter.kategori == filter || filter == "alle") {
+            //løb personlisten igennem og lav en klon
+
+            retter.forEach(retter => {
+                if (retter.kategori == madFilter || madFilter == "alle") {
 
                     let klon = temp.cloneNode(true).content;
 
-                    klon.querySelector(".id").textContent = madretter.id;
-                    klon.querySelector(".kategori").textContent = madretter.kategori;
-                    klon.querySelector("h3").textContent = madretter.navn;
-                    klon.querySelector(".pris").textContent = madretter.pris;
-                    klon.querySelector(".kortbeskrivelse").textContent = madretter.kortbeskrivelse;
-                    klon.querySelector(".langbeskrivelse").textContent = madretter.langbeskrivelse;
-                    klon.querySelector(".oprindelsesregion").textContent = madretter.oprindelsesregion;
-                    klon.querySelector("img").src = "imgs/medium/" + madretter.billede + "-md.jpg";
+                    //indsæt data i klonen
+                    klon.querySelector("img").src = "imgs/small/" + retter.billede + "-sm.jpg";
+                    klon.querySelector("h3").textContent = retter.navn;
+                    klon.querySelector(".kortbeskrivelse").textContent = retter.kortbeskrivelse;
+                    klon.querySelector(".pris").textContent = "Pris: " + retter.pris + ",-";
+                    //placer klon i DOM
 
                     dest.appendChild(klon);
                 }
-            });
+            })
         }
     </script>
 </body>
