@@ -103,21 +103,19 @@
             opacity: 1;
             pointer-events: all;
             transition: 0.5s;
-            height: 700px;
-            margin-top: -300px;
+            height: 750px;
+            margin-top: -600px;
         }
 
         #modal img {
             height: 35vw;
             width: 49vw;
-            margin-top: ;
             object-fit: scale-down;
         }
 
         #modal button {
             font-size: 1em;
             margin-top: 25px;
-
             border-radius: 50px;
         }
 
@@ -127,7 +125,7 @@
             padding-top: 30px;
             padding-bottom: 30px;
             text-align: center;
-            font-size: 0.7em;
+            font-size: 0.8em;
             background-color: #f7f3e8
         }
     </style>
@@ -196,10 +194,12 @@
 
         function filtrering() {
             dest.textContent = "";
+            // dest er distination som skal vise indholdet
             madFilter = this.getAttribute("data-kategori");
             visRetter();
         }
         async function hentJson() {
+            // den henter json informationerne viser sige i visRetter
             let myJson = await fetch("json/menu.json");
             retter = await myJson.json();
             visRetter();
@@ -209,19 +209,23 @@
             let temp = document.querySelector(".data-template");
             document.querySelector("h1").textContent = madFilter;
             //løb personlisten igennem og lav en klon
-            retter.forEach(retter => {
+            retter.forEach(ret => {
                 if (retter.kategori == madFilter || madFilter == "alle") {
                     let klon = temp.cloneNode(true).content;
                     //indsæt data i klonen
-                    klon.querySelector("img").src = "imgs/small/" + retter.billede + "-sm.jpg";
+                    klon.querySelector("img").src = "imgs/small/" + ret.billede + "-sm.jpg";
+                    //indsæter billede fra bestemt mappe
                     klon.querySelector("img").addEventListener("click", () => {
-                        visModal(retter);
+                        //ved click på billede viser den visModal
+                        visModal(ret);
                     });
-                    klon.querySelector("h2").textContent = retter.navn;
-                    klon.querySelector(".data-kortbeskrivelse").textContent = retter.kortbeskrivelse;
-                    klon.querySelector(".data-pris").textContent = "Pris: " + retter.pris;
+                    klon.querySelector("h2").textContent = ret.navn;
+                    //vælger json navn og lave den med en type h2
+                    klon.querySelector(".data-kortbeskrivelse").textContent = ret.kortbeskrivelse;
+                    klon.querySelector(".data-pris").textContent = "Pris: " + ret.pris;
                     //placer klon i DOM
                     dest.appendChild(klon);
+                    //dest sætter klonerne ind
                 }
             })
         }
@@ -238,7 +242,8 @@
 
         function skjulModal() {
             modal.classList.remove("vis");
-            //window.scrollTo(0);
+
+
         }
     </script>
 </body>
